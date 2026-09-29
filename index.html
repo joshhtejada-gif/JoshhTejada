@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Josh Tejada — Video / Film / Running</title>
+<meta name="description" content="Josh Tejada makes story-driven videos about athletics and the running scene.">
+<style>
+  /* ---------- Tokens ---------- */
+  :root {
+    --black: #000000;
+    --white: #ffffff;
+    --gray: #a3a3a3;       /* secondary text */
+    --dim: #5c5c5c;        /* tertiary text */
+    --line: #1f1f1f;       /* hairlines */
+    --screen: #111111;     /* empty video frame */
+    --blue: #0000ff;       /* the signature accent, used sparingly */
+    --sans: "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --gutter: clamp(16px, 4vw, 48px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img, video { display: block; width: 100%; height: 100%; object-fit: cover; }
+  ::selection { background: var(--blue); color: var(--white); }
+  a:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+
+  /* Small uppercase label used throughout */
+  .label {
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  /* The blue square: a tiny recurring mark */
+  .mark::before {
+    content: ""; display: inline-block;
+    width: 8px; height: 8px; margin-right: 10px;
+    background: var(--blue);
+    vertical-align: 1px;
+  }
+
+  /* ---------- Brand bar ---------- */
+  .brand {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 14px var(--gutter);
+    border-top: 3px solid var(--blue);
+    border-bottom: 1px solid var(--blue);
+  }
+  .brand a {
+    font-size: 14px; font-weight: 600; letter-spacing: .04em;
+    text-transform: none;
+  }
+  .brand a::after { /* blinking blue cursor block */
+    content: ""; display: inline-block;
+    width: 7px; height: 12px; margin-left: 4px;
+    background: var(--blue); vertical-align: -1px;
+    animation: blink 1.2s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 22px var(--gutter);
+    background: var(--black);
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  }
+  nav .home { font-weight: 700; }
+  nav ul { display: flex; gap: clamp(18px, 4vw, 44px); list-style: none; }
+  nav ul a {
+    color: var(--gray);
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+  nav ul a:hover, nav ul a:focus-visible { color: var(--white); border-color: var(--blue); }
+  /* Active link after a nav click (CSS only, via :target) */
+  body:has(#work:target) nav a[href="#work"],
+  body:has(#about:target) nav a[href="#about"],
+  body:has(#approach:target) nav a[href="#approach"],
+  body:has(#contact:target) nav a[href="#contact"] { color: var(--white); border-color: var(--blue); }
+  nav { border-bottom: 1px solid var(--line); }
+
+  /* Button */
+  .btn {
+    display: inline-block; margin-top: 24px;
+    padding: 10px 18px;
+    background: var(--blue); color: var(--white);
+    font-size: 11px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
+    border: 1px solid var(--blue);
+    transition: background .2s, color .2s;
+  }
+  .btn:hover, .btn:focus-visible { background: var(--black); }
+
+  /* ---------- Intro ---------- */
+  .intro {
+    padding: clamp(96px, 20vh, 200px) var(--gutter);
+    text-align: center;
+  }
+  .intro h1 {
+    font-size: clamp(24px, 3vw, 36px);
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+  .intro .signature {
+    margin-top: 10px;
+    font-family: Tahoma, Verdana, "Trebuchet MS", sans-serif; /* early-2000s Windows UI */
+    font-size: clamp(15px, 1.4vw, 18px);
+    color: var(--blue);
+  }
+
+  /* ---------- Work: the gallery ---------- */
+  #work { padding: 0 var(--gutter) clamp(80px, 14vh, 160px); }
+  .work-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 16px 0; margin-bottom: clamp(24px, 4vw, 48px);
+    border-top: 1px solid var(--blue);
+  }
+  .work-head h2 {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: .2em; text-transform: uppercase;
+  }
+  /* Uniform grid: every card is the same width and the same 4:3 shape */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 3vw, 44px) clamp(12px, 2vw, 28px);
+    align-items: start;
+  }
+  .project { min-width: 0; }
+
+  .frame {
+    position: relative; overflow: hidden;
+    width: 100%; height: auto;
+    aspect-ratio: 4 / 3;
+    background: var(--screen);
+  }
+  /* Thin blue border that draws in on hover */
+  .frame::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    box-shadow: inset 0 0 0 2px var(--blue);
+    opacity: 0; transition: opacity .25s;
+  }
+  .project:hover .frame::after { opacity: 1; }
+  .still {
+    position: absolute; inset: 0;
+    transition: transform .8s cubic-bezier(.2,.7,.1,1), opacity .4s;
+  }
+  .project:hover .still { transform: scale(1.03); }
+  /* Real videos: keep the player controls steady and fully visible */
+  .project:hover .still:has(video) { transform: none; }
+  .still video { background: var(--screen); }
+  .play {
+    position: absolute; left: 14px; bottom: 14px;
+    padding: 6px 12px;
+    background: var(--blue); color: var(--white);
+    font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity .25s, transform .25s;
+  }
+  .project:hover .play { opacity: 1; transform: none; }
+
+  .project figcaption {
+    padding-top: 12px;
+    text-align: center;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+  }
+  .project figcaption span {
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--blue);
+    transition: border-width .2s;
+  }
+  .project:hover figcaption span { border-bottom-width: 2px; }
+
+  /* Gentle scroll-in where supported */
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 20%;
+    }
+    @keyframes reveal { from { opacity: 0; transform: translateY(24px); } }
+  }
+
+  /* ---------- About / Approach / Contact share one simple layout ---------- */
+  .block {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px var(--gutter);
+    padding: clamp(64px, 12vh, 128px) var(--gutter);
+    border-top: 1px solid var(--blue);
+  }
+  .block > .label { grid-column: 1 / span 4; }
+  .block > .body { grid-column: 7 / span 6; }
+  .block p.lead {
+    font-size: clamp(16px, 1.35vw, 19px);
+    color: #e6e6e6;
+    max-width: 52ch;
+  }
+  #about p.lead {
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.55;
+    color: var(--white);
+    padding-left: 20px;
+    border-left: 2px solid var(--blue);
+  }
+
+  .steps { list-style: none; counter-reset: step; }
+  .steps li {
+    display: grid; grid-template-columns: 48px 1fr; gap: 8px;
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+  }
+  .steps li:last-child { border-bottom: 1px solid var(--line); }
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step, decimal-leading-zero);
+    font-family: var(--mono); font-size: 11px; color: var(--white); padding-top: 3px;
+    box-shadow: inset 0 -2px 0 var(--blue); justify-self: start; height: max-content;
+  }
+  .steps h3 { font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .steps p { color: var(--gray); margin-top: 4px; max-width: 48ch; }
+
+  .contact-links { list-style: none; }
+  .contact-links li {
+    display: grid; grid-template-columns: 120px 1fr; gap: 8px; align-items: baseline;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+  }
+  .contact-links li:last-child { border-bottom: 1px solid var(--line); }
+  .contact-links a {
+    font-size: clamp(16px, 1.6vw, 20px);
+    border-bottom: 2px solid var(--blue);
+    transition: border-color .2s, background .2s;
+    word-break: break-all;
+  }
+  .contact-links a:hover, .contact-links a:focus-visible { border-color: var(--blue); background: var(--blue); }
+
+  footer {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    padding: 24px var(--gutter);
+    border-top: 1px solid var(--line);
+    border-bottom: 3px solid var(--blue);
+    font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 800px) {
+    nav ul { gap: 16px; }
+    nav ul li:first-child { display: none; } /* "Work" is right below anyway */
+    .block > .label, .block > .body { grid-column: 1 / -1; }
+    .gallery { grid-template-columns: minmax(0, 1fr); }
+    .play { opacity: 1; transform: none; }
+  }
+  @media (max-width: 420px) {
+    nav .home span, .brand .label { display: none; }
+    .contact-links li { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">
+  <a href="#top">laneswtichinggg</a>
+  <span class="label">Film / Athletics / Running</span>
+</div>
+
+<nav>
+  <a href="#top" class="home mark">Josh<span> Tejada</span></a>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<header class="intro" id="top">
+  <h1>Josh Tejada</h1>
+  <p class="signature">some of my work ;)</p>
+</header>
+
+<main>
+<section id="work">
+  <div class="work-head">
+    <h2 class="mark">Portfolio</h2>
+    <span class="label">2025 — 2026</span>
+  </div>
+
+  <!-- EDIT: each .still is a placeholder. Put your footage inside it, e.g.
+       <div class="still"><video src="media/reel.mp4" poster="media/reel.jpg" autoplay muted loop playsinline></video></div>
+       <div class="still"><img src="media/project-01.jpg" alt="Runner crossing the finish line at dawn"></div>
+       Wrap the <figure> in <a href="..."> to link to the full video. -->
+  <div class="gallery">
+    <figure class="project reveal">
+      <div class="frame"><div class="still"><video src="media/GARMINCirqa.mp4#t=0.1" controls preload="metadata" playsinline></video></div></div>
+      <figcaption><span>#001</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"><video src="media/mm2fin.mp4#t=0.1" controls preload="metadata" playsinline></video></div></div>
+      <figcaption><span>#002</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"><video src="media/monmouthmilefinal.mp4#t=0.1" controls preload="metadata" playsinline></video></div></div>
+      <figcaption><span>#003</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"></div><span class="play">Play</span></div>
+      <figcaption><span>#004</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"></div><span class="play">Play</span></div>
+      <figcaption><span>#005</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"></div><span class="play">Play</span></div>
+      <figcaption><span>#006</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"></div><span class="play">Play</span></div>
+      <figcaption><span>#007</span></figcaption>
+    </figure>
+    <figure class="project reveal">
+      <div class="frame"><div class="still"></div><span class="play">Play</span></div>
+      <figcaption><span>#008</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block" id="about">
+  <p class="label mark">About</p>
+  <div class="body">
+    <p class="lead">I’m Josh Tejada, a filmmaker and video creator focused on athletics and the running world. I’m drawn to the stories behind the sport — the people, personalities, pressure, and moments that make it more than just a race. I want to create more story-driven films that feel authentic, cinematic, and personal. I’ve been creating video for the past year, and I’m building my work around athletes, brands, and the running community.</p>
+    <a class="btn" href="#contact">Work with me</a>
+  </div>
+</section>
+
+<section class="block" id="approach">
+  <p class="label mark">Approach</p>
+  <div class="body">
+    <ol class="steps">
+      <li><div><h3>Find the story</h3><p>We talk about who you are, what the moment is, and how people should feel when the video ends.</p></div></li>
+      <li><div><h3>Shoot it right</h3><p>I film in the middle of the action: on the course, at the track, and in the quiet moments before the start.</p></div></li>
+      <li><div><h3>Cut with feeling</h3><p>I edit, color, and design the sound so the film looks great and plays like a story.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block" id="contact">
+  <p class="label mark">Contact</p>
+  <div class="body">
+    <ul class="contact-links">
+      <li><span class="label">Email</span><a href="mailto:JoshhTejada@gmail.com">JoshhTejada@gmail.com</a></li>
+      <li><span class="label">Instagram</span><a href="https://www.instagram.com/lanesw1tch1n/" target="_blank" rel="noopener noreferrer">@lanesw1tch1n</a></li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer>
+  <span>© 2026 Josh Tejada</span>
+  <span>Video / Film / Running</span>
+</footer>
+
+</body>
+</html>
